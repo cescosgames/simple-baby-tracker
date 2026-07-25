@@ -4,6 +4,7 @@
 	import { formatTimeDisplay, formatDateHeader } from '$lib/date';
 	import type { Entry } from '$lib/types';
 	import EditEntryModal from '$lib/components/EditEntryModal.svelte';
+	import WeekSummary from '$lib/components/WeekSummary.svelte';
 
 	const categories = ['Feed', 'Pee', 'Poop'] as const;
 	type Category = (typeof categories)[number];
@@ -50,16 +51,29 @@
 				: poopGroups
 	);
 
+	let feedRows = $derived([...$feeds]);
+	let peeRows = $derived([...$diapers].filter((d) => d.subtype === 'pee'));
+	let poopRows = $derived([...$diapers].filter((d) => d.subtype === 'poop'));
+
+	let currentRows = $derived(
+		categories[pageIndex] === 'Feed' ? feedRows : categories[pageIndex] === 'Pee' ? peeRows : poopRows
+	);
+
+	const barClasses: Record<Category, string> = {
+		Feed: 'bg-baby-sky',
+		Pee: 'bg-baby-lavender',
+		Poop: 'bg-baby-mint'
+	};
+
 	function detail(e: Entry) {
 		if (e.kind === 'feed') return e.quality;
 		return e.subtype === 'poop' ? e.color : '—';
 	}
 </script>
 
-<main class="flex min-h-dvh flex-col bg-baby-cream px-4 pb-10 pt-6 text-baby-ink">
-	<div class="mb-4 flex items-center justify-between">
+<main class="flex min-h-dvh flex-col bg-baby-cream px-4 pt-6 pb-36 text-baby-ink">
+	<div class="mb-4 text-center">
 		<h1 class="text-lg font-semibold">Charts</h1>
-		<a href="/" class="rounded-full bg-white/60 px-4 py-2 text-sm font-medium shadow-sm">Home</a>
 	</div>
 
 	<div class="mb-6 flex items-center justify-between">
@@ -95,8 +109,12 @@
 			in:fly={{ x: direction * 60, duration: 200 }}
 			out:fly={{ x: direction * -60, duration: 150 }}
 		>
+			<WeekSummary rows={currentRows} barClass={barClasses[categories[pageIndex]]} />
+
 			{#if currentGroups.length === 0}
-				<p class="pt-10 text-center text-baby-ink/40">No {categories[pageIndex].toLowerCase()} entries yet.</p>
+				<p class="pt-10 text-center text-baby-ink/40">
+					No {categories[pageIndex].toLowerCase()} entries yet.
+				</p>
 			{/if}
 
 			{#each currentGroups as group (group.date)}

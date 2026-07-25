@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { scale, fade } from 'svelte/transition';
+	import { elasticOut } from 'svelte/easing';
 	import { logFeed, logPee, logPoop, deleteEntry } from '$lib/stores/entries';
 	import { showToast } from '$lib/stores/toast';
 	import { formatTimeDisplay } from '$lib/date';
@@ -8,6 +10,7 @@
 	type Zone = 'pee' | 'feed' | 'poop';
 
 	const DWELL_MS = 600;
+	const CONFIRM_MS = 220; // how long the success pop shows before the popup closes
 	const ZONE_THRESHOLD = 56; // px of horizontal drag needed to leave the Feed zone
 	const zones: Zone[] = ['pee', 'feed', 'poop'];
 	const labels: Record<Zone, string> = { pee: 'PEE', feed: 'FEED', poop: 'POOP' };
@@ -16,6 +19,7 @@
 	let held = $state(false);
 	let zone = $state<Zone>('feed');
 	let progress = $state(0);
+	let success = $state(false);
 	let pickerOpen = $state(false);
 
 	let startX = 0;
@@ -49,6 +53,7 @@
 		startX = e.clientX;
 		zone = 'feed';
 		fired = false;
+		success = false;
 		held = true;
 		startDwell();
 	}
@@ -71,18 +76,23 @@
 	function fire() {
 		fired = true;
 		cancelDwell();
-		held = false;
-		if (zone === 'poop') {
-			pickerOpen = true;
-			return;
-		}
-		if (zone === 'feed') {
-			const entry = logFeed('normal');
-			showToast(`Feed logged ${formatTimeDisplay(entry.time)}`, () => deleteEntry(entry));
-		} else {
-			const entry = logPee();
-			showToast(`Pee logged ${formatTimeDisplay(entry.time)}`, () => deleteEntry(entry));
-		}
+		progress = 1;
+		success = true;
+		navigator.vibrate?.(15);
+
+		setTimeout(() => {
+			held = false;
+			success = false;
+			if (zone === 'poop') {
+				pickerOpen = true;
+			} else if (zone === 'feed') {
+				const entry = logFeed('normal');
+				showToast(`Feed logged ${formatTimeDisplay(entry.time)}`, () => deleteEntry(entry));
+			} else {
+				const entry = logPee();
+				showToast(`Pee logged ${formatTimeDisplay(entry.time)}`, () => deleteEntry(entry));
+			}
+		}, CONFIRM_MS);
 	}
 
 	function handlePoopSelect(color: DiaperColor) {
@@ -97,14 +107,20 @@
 </script>
 
 {#if held}
-	<div class="fixed inset-x-0 bottom-28 z-30 flex justify-center px-6">
+	<div
+		class="fixed inset-x-0 bottom-32 z-30 flex justify-center px-6"
+		in:scale={{ duration: 260, start: 0.7, easing: elasticOut }}
+		out:fade={{ duration: 120 }}
+	>
 		<div class="flex items-center gap-4 rounded-full bg-white/90 px-5 py-5 shadow-lg">
 			{#each zones as z (z)}
 				<div
-					class="relative flex h-20 w-20 items-center justify-center rounded-full text-xs font-bold tracking-widest {zone ===
+					class="relative flex h-20 w-20 items-center justify-center rounded-full text-xs font-bold tracking-widest transition-all duration-150 {zone ===
 					z
-						? 'bg-baby-ink text-baby-cream'
-						: 'text-baby-ink/40'}"
+						? success
+							? 'scale-125 bg-baby-mint text-baby-ink'
+							: 'scale-110 bg-baby-ink text-baby-cream'
+						: 'scale-90 text-baby-ink/40'}"
 				>
 					{#if zone === z && progress > 0}
 						<svg class="absolute inset-0 -rotate-90" viewBox="0 0 80 80">
@@ -142,7 +158,9 @@
 	onpointerup={handlePointerEnd}
 	onpointercancel={handlePointerEnd}
 	aria-label="Hold and drag to log feed, pee, or poop"
-	class="fixed bottom-6 left-1/2 z-40 flex h-20 w-20 -translate-x-1/2 touch-none items-center justify-center rounded-full bg-baby-ink text-4xl font-light text-baby-cream shadow-lg select-none active:scale-95"
+	class="fixed bottom-10 left-1/2 z-40 flex h-20 w-20 -translate-x-1/2 touch-none items-center justify-center rounded-full bg-baby-ink text-4xl font-light text-baby-cream shadow-lg transition-transform duration-150 select-none {held
+		? 'scale-110 shadow-2xl'
+		: 'scale-100'}"
 >
 	+
 </button>
