@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+	--color-baby-lavender: #c6c3ff;
+	--color-baby-mint: #b7e8ca;
+	--color-baby-cream: #fff7d6;
+	--color-baby-blush: #e8b3b1;
+	--color-baby-sky: #c8eaff;
+	--color-baby-ink: #3f3d56;
+}
