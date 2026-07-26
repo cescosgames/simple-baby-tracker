@@ -102,12 +102,15 @@ screen edges (not edge-to-edge) with two destinations, **Home** and
 **History** (routes `/` and `/history`), rendered globally from the root
 layout — along with the Add control and the toast — so logging works
 identically from either screen. Translucent/blurred background
-(`backdrop-blur`), floating a fixed margin above the true bottom edge via
-`max(1rem, env(safe-area-inset-bottom))` rather than sitting flush against
-it — deliberate, since a flush edge-to-edge bar turned out to be fragile
-across iOS install modes (legacy Add-to-Home-Screen vs. real manifest-driven
-PWA install produce different viewport/safe-area math, and a fixed margin
-sidesteps that entirely instead of chasing exact pixel anchoring). The
+(`backdrop-blur`), floating a small fixed margin above the true bottom edge
+via `max(0.5rem, calc(env(safe-area-inset-bottom) - 0.75rem))` — clears the
+home indicator without also stacking the full safe-area inset on top as
+extra lift (that stacking made the pill sit noticeably higher than intended)
+— rather than sitting flush against the edge. Flush was tried first but
+turned out to be fragile across iOS install modes (legacy Add-to-Home-Screen
+vs. real manifest-driven PWA install produce different viewport/safe-area
+math, and a fixed margin sidesteps that entirely instead of chasing exact
+pixel anchoring). The
 active tab is shown by a single sliding highlight panel spanning the full
 left or right half of the pill (not just around the icon/label), including
 the strip behind the Add control's circle — animates between halves on

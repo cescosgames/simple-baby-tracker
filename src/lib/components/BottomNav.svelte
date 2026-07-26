@@ -6,7 +6,7 @@
 
 <nav
 	class="fixed inset-x-4 z-30 flex h-16 items-stretch overflow-hidden rounded-full bg-baby-card/75 shadow-[0_4px_24px_rgba(63,61,86,0.18)] backdrop-blur-xl"
-	style="bottom: max(1rem, env(safe-area-inset-bottom))"
+	style="bottom: max(0.5rem, calc(env(safe-area-inset-bottom) - 0.75rem))"
 >
 	<div
 		class="absolute inset-y-0 w-1/2 rounded-full bg-baby-lavender/60 transition-transform duration-300 ease-out"
