@@ -4,6 +4,8 @@
 
 html,
 body {
+	height: 100dvh;
+	overflow: hidden;
 	background-color: #fff7d6;
 	overscroll-behavior: none;
 }
