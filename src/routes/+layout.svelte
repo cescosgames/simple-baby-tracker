@@ -5,6 +5,7 @@
 	import AddControl from '$lib/components/AddControl.svelte';
 	import Toast from '$lib/components/Toast.svelte';
 	import SettingsButton from '$lib/components/SettingsButton.svelte';
+	import DebugOverlay from '$lib/components/DebugOverlay.svelte';
 
 	let { children } = $props();
 </script>
@@ -17,3 +18,4 @@
 <AddControl />
 <Toast />
 <SettingsButton />
+<DebugOverlay />
