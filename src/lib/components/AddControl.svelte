@@ -123,7 +123,8 @@
 
 {#if held}
 	<div
-		class="fixed inset-x-0 bottom-32 z-30 flex justify-center px-6"
+		class="fixed inset-x-0 z-30 flex justify-center px-6"
+		style="bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 8rem)"
 		in:scale={{ duration: 260, start: 0.7, easing: elasticOut }}
 		out:fade={{ duration: 120 }}
 	>
@@ -173,9 +174,10 @@
 	onpointerup={handlePointerEnd}
 	onpointercancel={handlePointerEnd}
 	aria-label="Hold and drag to log feed, pee, or poop"
-	class="fixed bottom-10 left-1/2 z-40 flex h-20 w-20 -translate-x-1/2 touch-none items-center justify-center rounded-full bg-baby-ink text-4xl font-light text-baby-cream shadow-lg transition-transform duration-150 select-none {held
+	class="fixed left-1/2 z-40 flex h-20 w-20 -translate-x-1/2 touch-none items-center justify-center rounded-full bg-baby-ink text-4xl font-light text-baby-cream shadow-lg transition-transform duration-150 select-none {held
 		? 'scale-110 shadow-2xl'
 		: 'scale-100'}"
+	style="bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 1.5rem)"
 >
 	+
 </button>

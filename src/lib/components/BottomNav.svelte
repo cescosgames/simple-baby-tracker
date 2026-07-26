@@ -5,23 +5,23 @@
 </script>
 
 <nav
-	class="fixed inset-x-0 bottom-0 z-30 flex items-stretch bg-baby-card/90 shadow-[0_-2px_12px_rgba(63,61,86,0.08)]"
+	class="fixed inset-x-4 z-30 flex h-16 items-stretch overflow-hidden rounded-full bg-baby-card/75 shadow-[0_4px_24px_rgba(63,61,86,0.18)] backdrop-blur-xl"
+	style="bottom: max(1rem, env(safe-area-inset-bottom))"
 >
 	<div
-		class="absolute inset-y-0 w-1/2 bg-baby-lavender/60 transition-transform duration-300 ease-out"
+		class="absolute inset-y-0 w-1/2 rounded-full bg-baby-lavender/60 transition-transform duration-300 ease-out"
 		style="transform: translateX({isHistory ? '100%' : '0'})"
 	></div>
 
 	<a
 		href="/"
-		class="relative z-10 flex flex-1 flex-col items-center justify-center gap-1 pt-2 text-xs font-medium transition-colors {!isHistory
+		class="relative z-10 flex flex-1 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors {!isHistory
 			? 'text-baby-ink'
 			: 'text-baby-ink/40'}"
-		style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom))"
 	>
 		<svg
-			width="22"
-			height="22"
+			width="20"
+			height="20"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"
@@ -39,14 +39,13 @@
 
 	<a
 		href="/history"
-		class="relative z-10 flex flex-1 flex-col items-center justify-center gap-1 pt-2 text-xs font-medium transition-colors {isHistory
+		class="relative z-10 flex flex-1 flex-col items-center justify-center gap-0.5 text-xs font-medium transition-colors {isHistory
 			? 'text-baby-ink'
 			: 'text-baby-ink/40'}"
-		style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom))"
 	>
 		<svg
-			width="22"
-			height="22"
+			width="20"
+			height="20"
 			viewBox="0 0 24 24"
 			fill="none"
 			stroke="currentColor"

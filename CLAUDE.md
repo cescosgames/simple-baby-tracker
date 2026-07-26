@@ -97,14 +97,21 @@ No more "three big buttons" — the current design splits the screen:
   `feeds` collection.
 
 ### Bottom navigation
-An iOS-style fixed bottom tab bar (`BottomNav.svelte`) with two destinations,
-**Home** and **History** (routes `/` and `/history`), rendered globally from
-the root layout — along with the Add control and the toast — so logging
-works identically from either screen. The active tab is shown by a single
-sliding highlight panel spanning the full left or right half of the bar
-(not just a pill around the icon/label), including the strip behind the
-Add control's circle — it animates between the two halves on navigation for
-a more modern feel.
+A floating "liquid glass" pill tab bar (`BottomNav.svelte`), inset from the
+screen edges (not edge-to-edge) with two destinations, **Home** and
+**History** (routes `/` and `/history`), rendered globally from the root
+layout — along with the Add control and the toast — so logging works
+identically from either screen. Translucent/blurred background
+(`backdrop-blur`), floating a fixed margin above the true bottom edge via
+`max(1rem, env(safe-area-inset-bottom))` rather than sitting flush against
+it — deliberate, since a flush edge-to-edge bar turned out to be fragile
+across iOS install modes (legacy Add-to-Home-Screen vs. real manifest-driven
+PWA install produce different viewport/safe-area math, and a fixed margin
+sidesteps that entirely instead of chasing exact pixel anchoring). The
+active tab is shown by a single sliding highlight panel spanning the full
+left or right half of the pill (not just around the icon/label), including
+the strip behind the Add control's circle — animates between halves on
+navigation.
 
 ### History / Charts view
 Renamed "Charts" in the UI. This is the *deliberate review* screen (e.g. for
