@@ -1,4 +1,4 @@
-import { writable, derived } from 'svelte/store';
+import { writable, derived, get } from 'svelte/store';
 import { browser } from '$app/environment';
 import type { Diaper, DiaperColor, Entry, Feed, FeedQuality } from '$lib/types';
 import { formatDate, formatTime } from '$lib/date';
@@ -111,4 +111,21 @@ export function updateDiaper(id: string, patch: Partial<Omit<Diaper, 'id' | 'kin
 			return next;
 		})
 	);
+}
+
+export function exportBackup(): string {
+	return JSON.stringify(
+		{ exportedAt: new Date().toISOString(), feeds: get(feeds), diapers: get(diapers) },
+		null,
+		2
+	);
+}
+
+export function importBackup(json: string) {
+	const parsed = JSON.parse(json) as { feeds?: Feed[]; diapers?: Diaper[] };
+	if (!Array.isArray(parsed.feeds) || !Array.isArray(parsed.diapers)) {
+		throw new Error('Backup file is missing feeds/diapers arrays');
+	}
+	feeds.set(parsed.feeds);
+	diapers.set(parsed.diapers);
 }

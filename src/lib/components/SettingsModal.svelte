@@ -1,12 +1,40 @@
 <script lang="ts">
 	import { APP_VERSION } from '$lib/version';
 	import { needRefresh, offlineReady, updateServiceWorker } from '$lib/pwa';
+	import { exportBackup, importBackup } from '$lib/stores/entries';
 
 	interface Props {
 		onclose: () => void;
 	}
 
 	let { onclose }: Props = $props();
+
+	let fileInput = $state<HTMLInputElement>();
+	let status = $state('');
+
+	function handleExport() {
+		const blob = new Blob([exportBackup()], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		const stamp = new Date().toISOString().slice(0, 10);
+		a.href = url;
+		a.download = `baby-tracker-backup-${stamp}.json`;
+		a.click();
+		URL.revokeObjectURL(url);
+		status = 'Backup file saved.';
+	}
+
+	async function handleImportFile(e: Event) {
+		const file = (e.target as HTMLInputElement).files?.[0];
+		if (!file) return;
+		try {
+			importBackup(await file.text());
+			status = 'Backup restored.';
+		} catch {
+			status = "Couldn't read that file — is it a Baby Tracker backup?";
+		}
+		(e.target as HTMLInputElement).value = '';
+	}
 </script>
 
 <div
@@ -41,6 +69,38 @@
 				<div class="rounded-xl bg-baby-card/60 px-4 py-3 text-sm text-baby-ink/70">
 					{$offlineReady ? "You're up to date and ready to work offline." : 'Checking for updates…'}
 				</div>
+			{/if}
+		</section>
+
+		<section class="flex flex-col gap-2">
+			<p class="text-xs font-semibold tracking-wide text-baby-ink/50 uppercase">Backup</p>
+			<p class="text-xs text-baby-ink/60">
+				Entries live only on this device. Export a backup before reinstalling the app or switching
+				phones, just in case.
+			</p>
+			<div class="flex gap-2">
+				<button
+					class="flex-1 rounded-xl bg-baby-card/60 px-4 py-3 text-sm font-medium text-baby-ink"
+					onclick={handleExport}
+				>
+					Export backup
+				</button>
+				<button
+					class="flex-1 rounded-xl bg-baby-card/60 px-4 py-3 text-sm font-medium text-baby-ink"
+					onclick={() => fileInput?.click()}
+				>
+					Restore backup
+				</button>
+				<input
+					bind:this={fileInput}
+					type="file"
+					accept="application/json"
+					class="hidden"
+					onchange={handleImportFile}
+				/>
+			</div>
+			{#if status}
+				<p class="text-xs text-baby-ink/60">{status}</p>
 			{/if}
 		</section>
 
