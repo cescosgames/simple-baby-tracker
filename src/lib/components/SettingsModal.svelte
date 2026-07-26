@@ -38,14 +38,15 @@
 </script>
 
 <div
-	class="fixed inset-0 z-50 flex flex-col justify-end bg-black/50"
+	class="fixed inset-0 z-50 flex flex-col justify-end bg-black/50 backdrop-blur-sm"
 	role="button"
 	tabindex="0"
 	onclick={onclose}
 	onkeydown={(e) => e.key === 'Escape' && onclose()}
 >
 	<div
-		class="flex flex-col gap-5 rounded-t-3xl bg-baby-cream p-6 pb-10"
+		class="mx-4 flex flex-col gap-5 rounded-3xl bg-baby-card/85 p-6 shadow-2xl backdrop-blur-xl"
+		style="margin-bottom: max(1rem, env(safe-area-inset-bottom))"
 		role="presentation"
 		onclick={(e) => e.stopPropagation()}
 	>
