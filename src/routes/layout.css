@@ -4,9 +4,7 @@
 
 html,
 body {
-	height: 100dvh;
 	background-color: #fff7d6;
-	overflow: hidden;
 	overscroll-behavior: none;
 }
 
