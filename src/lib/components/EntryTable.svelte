@@ -21,11 +21,11 @@
 	}
 </script>
 
-<div class="flex-1 overflow-y-auto px-4 pt-2 pb-36">
+<div class="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pt-2 pb-36">
 	<p class="mb-2 px-1 text-xs font-medium tracking-wide text-baby-ink/50 uppercase">
 		Last {LIMIT} entries
 	</p>
-	<div class="overflow-hidden rounded-2xl bg-white/60 shadow-sm">
+	<div class="overflow-hidden rounded-2xl bg-baby-card/60 shadow-sm">
 		<table class="w-full border-collapse text-sm">
 			<thead>
 				<tr class="text-left text-xs uppercase tracking-wide text-baby-ink/50">

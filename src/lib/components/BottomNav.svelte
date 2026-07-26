@@ -5,14 +5,19 @@
 </script>
 
 <nav
-	class="fixed inset-x-0 bottom-0 z-30 flex h-20 items-center justify-around bg-white/90 px-10 pt-2 shadow-[0_-2px_12px_rgba(63,61,86,0.08)]"
-	style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom))"
+	class="fixed inset-x-0 bottom-0 z-30 flex items-stretch bg-baby-card/90 shadow-[0_-2px_12px_rgba(63,61,86,0.08)]"
 >
+	<div
+		class="absolute inset-y-0 w-1/2 bg-baby-lavender/60 transition-transform duration-300 ease-out"
+		style="transform: translateX({isHistory ? '100%' : '0'})"
+	></div>
+
 	<a
 		href="/"
-		class="flex flex-col items-center gap-1 rounded-2xl px-5 py-1.5 text-xs font-medium transition-colors {!isHistory
-			? 'bg-baby-lavender/60 text-baby-ink'
+		class="relative z-10 flex flex-1 flex-col items-center justify-center gap-1 pt-2 text-xs font-medium transition-colors {!isHistory
+			? 'text-baby-ink'
 			: 'text-baby-ink/40'}"
+		style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom))"
 	>
 		<svg
 			width="22"
@@ -30,13 +35,14 @@
 		Home
 	</a>
 
-	<div class="w-16 shrink-0"></div>
+	<div class="w-20 shrink-0"></div>
 
 	<a
 		href="/history"
-		class="flex flex-col items-center gap-1 rounded-2xl px-5 py-1.5 text-xs font-medium transition-colors {isHistory
-			? 'bg-baby-lavender/60 text-baby-ink'
+		class="relative z-10 flex flex-1 flex-col items-center justify-center gap-1 pt-2 text-xs font-medium transition-colors {isHistory
+			? 'text-baby-ink'
 			: 'text-baby-ink/40'}"
+		style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom))"
 	>
 		<svg
 			width="22"

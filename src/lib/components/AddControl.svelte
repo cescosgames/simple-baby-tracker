@@ -12,6 +12,7 @@
 	const DWELL_MS = 600;
 	const CONFIRM_MS = 220; // how long the success pop shows before the popup closes
 	const ZONE_THRESHOLD = 56; // px of horizontal drag needed to leave the Feed zone
+	const ZONE_HYSTERESIS = 20; // px of slack required to re-enter Feed, so hovering near the boundary doesn't reset the dwell ring
 	const zones: Zone[] = ['pee', 'feed', 'poop'];
 	const labels: Record<Zone, string> = { pee: 'PEE', feed: 'FEED', poop: 'POOP' };
 	const circumference = 2 * Math.PI * 36;
@@ -61,11 +62,25 @@
 	function handlePointerMove(e: PointerEvent) {
 		if (!held) return;
 		const dx = e.clientX - startX;
-		const nextZone: Zone = dx < -ZONE_THRESHOLD ? 'pee' : dx > ZONE_THRESHOLD ? 'poop' : 'feed';
+		const nextZone = resolveZone(dx, zone);
 		if (nextZone !== zone) {
 			zone = nextZone;
 			startDwell();
 		}
+	}
+
+	// Hysteresis prevents a thumb hovering near a zone boundary from repeatedly
+	// crossing it and resetting the dwell ring back to 0 every frame.
+	function resolveZone(dx: number, current: Zone): Zone {
+		if (current === 'feed') {
+			if (dx < -ZONE_THRESHOLD) return 'pee';
+			if (dx > ZONE_THRESHOLD) return 'poop';
+			return 'feed';
+		}
+		if (current === 'pee') {
+			return dx > -(ZONE_THRESHOLD - ZONE_HYSTERESIS) ? 'feed' : 'pee';
+		}
+		return dx < ZONE_THRESHOLD - ZONE_HYSTERESIS ? 'feed' : 'poop';
 	}
 
 	function handlePointerEnd() {
@@ -112,7 +127,7 @@
 		in:scale={{ duration: 260, start: 0.7, easing: elasticOut }}
 		out:fade={{ duration: 120 }}
 	>
-		<div class="flex items-center gap-4 rounded-full bg-white/90 px-5 py-5 shadow-lg">
+		<div class="flex items-center gap-4 rounded-full bg-baby-card/90 px-5 py-5 shadow-lg">
 			{#each zones as z (z)}
 				<div
 					class="relative flex h-20 w-20 items-center justify-center rounded-full text-xs font-bold tracking-widest transition-all duration-150 {zone ===

@@ -18,6 +18,37 @@
 		pageIndex = (pageIndex + delta + categories.length) % categories.length;
 	}
 
+	const SWIPE_THRESHOLD = 50;
+	const AXIS_LOCK_THRESHOLD = 10;
+
+	let swipeStartX = 0;
+	let swipeStartY = 0;
+	let swipeAxis: 'x' | 'y' | null = null;
+
+	function handleSwipeStart(e: PointerEvent) {
+		swipeStartX = e.clientX;
+		swipeStartY = e.clientY;
+		swipeAxis = null;
+	}
+
+	function handleSwipeMove(e: PointerEvent) {
+		if (swipeAxis === 'y') return;
+		const dx = e.clientX - swipeStartX;
+		const dy = e.clientY - swipeStartY;
+		if (swipeAxis === null) {
+			if (Math.abs(dx) < AXIS_LOCK_THRESHOLD && Math.abs(dy) < AXIS_LOCK_THRESHOLD) return;
+			swipeAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+		}
+	}
+
+	function handleSwipeEnd(e: PointerEvent) {
+		if (swipeAxis === 'x') {
+			const dx = e.clientX - swipeStartX;
+			if (Math.abs(dx) > SWIPE_THRESHOLD) go(dx < 0 ? 1 : -1);
+		}
+		swipeAxis = null;
+	}
+
 	function byDateDesc(a: Entry, b: Entry) {
 		return b.created.localeCompare(a.created);
 	}
@@ -71,15 +102,15 @@
 	}
 </script>
 
-<main class="flex min-h-dvh flex-col bg-baby-cream px-4 pt-6 pb-36 text-baby-ink">
-	<div class="mb-4 text-center">
+<main class="flex h-dvh flex-col overflow-hidden bg-baby-cream px-4 text-baby-ink">
+	<div class="mb-4 text-center" style="padding-top: max(1.5rem, env(safe-area-inset-top))">
 		<h1 class="text-lg font-semibold">Charts</h1>
 	</div>
 
 	<div class="mb-6 flex items-center justify-between">
 		<button
 			aria-label="Previous chart"
-			class="flex h-11 w-11 items-center justify-center rounded-full bg-white/60 text-xl shadow-sm active:scale-95"
+			class="flex h-11 w-11 items-center justify-center rounded-full bg-baby-card/60 text-xl shadow-sm active:scale-95"
 			onclick={() => go(-1)}
 		>
 			‹
@@ -96,7 +127,7 @@
 		</div>
 		<button
 			aria-label="Next chart"
-			class="flex h-11 w-11 items-center justify-center rounded-full bg-white/60 text-xl shadow-sm active:scale-95"
+			class="flex h-11 w-11 items-center justify-center rounded-full bg-baby-card/60 text-xl shadow-sm active:scale-95"
 			onclick={() => go(1)}
 		>
 			›
@@ -105,7 +136,14 @@
 
 	{#key pageIndex}
 		<div
-			class="flex-1"
+			class="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-36"
+			style="touch-action: pan-y"
+			role="group"
+			aria-label="{categories[pageIndex]} history, swipe left or right to switch"
+			onpointerdown={handleSwipeStart}
+			onpointermove={handleSwipeMove}
+			onpointerup={handleSwipeEnd}
+			onpointercancel={() => (swipeAxis = null)}
 			in:fly={{ x: direction * 60, duration: 200 }}
 			out:fly={{ x: direction * -60, duration: 150 }}
 		>
@@ -122,7 +160,7 @@
 					<h3 class="mb-2 text-xs font-semibold uppercase tracking-wide text-baby-ink/50">
 						{formatDateHeader(group.date)}
 					</h3>
-					<div class="overflow-hidden rounded-xl bg-white/70 shadow-sm">
+					<div class="overflow-hidden rounded-xl bg-baby-card/70 shadow-sm">
 						{#each group.items as entry, i (entry.id)}
 							<button
 								class="flex w-full items-center gap-4 px-4 py-3 text-left {i > 0

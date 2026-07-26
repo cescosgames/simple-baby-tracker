@@ -43,7 +43,7 @@
 	}
 </script>
 
-<div class="mb-6 rounded-2xl bg-white/60 px-4 py-5 shadow-sm">
+<div class="mb-6 rounded-2xl bg-baby-card/60 px-4 py-5 shadow-sm">
 	<p class="mb-4 text-xs font-semibold tracking-wide text-baby-ink/50 uppercase">Last 7 days</p>
 	<div class="flex items-end justify-between gap-2">
 		{#each counts as day (day.key)}

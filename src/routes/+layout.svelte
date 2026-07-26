@@ -4,6 +4,7 @@
 	import BottomNav from '$lib/components/BottomNav.svelte';
 	import AddControl from '$lib/components/AddControl.svelte';
 	import Toast from '$lib/components/Toast.svelte';
+	import SettingsButton from '$lib/components/SettingsButton.svelte';
 
 	let { children } = $props();
 </script>
@@ -15,3 +16,4 @@
 <BottomNav />
 <AddControl />
 <Toast />
+<SettingsButton />

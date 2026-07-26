@@ -67,7 +67,7 @@
 	onkeydown={(e) => e.key === 'Escape' && onclose()}
 >
 	<div
-		class="w-full max-w-sm rounded-3xl bg-white/90 p-6 shadow-lg"
+		class="w-full max-w-sm rounded-3xl bg-baby-card/90 p-6 shadow-lg"
 		role="presentation"
 		transition:scale={{ duration: 260, start: 0.85, easing: elasticOut }}
 		onclick={(e) => e.stopPropagation()}
