@@ -124,7 +124,7 @@
 {#if held}
 	<div
 		class="fixed inset-x-0 z-30 flex justify-center px-6"
-		style="bottom: calc(max(0.5rem, calc(env(safe-area-inset-bottom) - 0.75rem)) + 8rem)"
+		style="bottom: calc(env(safe-area-inset-bottom) + 8.5rem)"
 		in:scale={{ duration: 260, start: 0.7, easing: elasticOut }}
 		out:fade={{ duration: 120 }}
 	>
@@ -177,7 +177,7 @@
 	class="fixed left-1/2 z-40 flex h-20 w-20 -translate-x-1/2 touch-none items-center justify-center rounded-full bg-baby-ink text-4xl font-light text-baby-cream shadow-lg transition-transform duration-150 select-none {held
 		? 'scale-110 shadow-2xl'
 		: 'scale-100'}"
-	style="bottom: calc(max(0.5rem, calc(env(safe-area-inset-bottom) - 0.75rem)) + 1.5rem)"
+	style="bottom: calc(env(safe-area-inset-bottom) + 2rem)"
 >
 	+
 </button>

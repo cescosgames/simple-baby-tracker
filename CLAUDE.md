@@ -97,24 +97,18 @@ No more "three big buttons" — the current design splits the screen:
   `feeds` collection.
 
 ### Bottom navigation
-A floating "liquid glass" pill tab bar (`BottomNav.svelte`), inset from the
-screen edges (not edge-to-edge) with two destinations, **Home** and
-**History** (routes `/` and `/history`), rendered globally from the root
-layout — along with the Add control and the toast — so logging works
-identically from either screen. Translucent/blurred background
-(`backdrop-blur`), floating a small fixed margin above the true bottom edge
-via `max(0.5rem, calc(env(safe-area-inset-bottom) - 0.75rem))` — clears the
-home indicator without also stacking the full safe-area inset on top as
-extra lift (that stacking made the pill sit noticeably higher than intended)
-— rather than sitting flush against the edge. Flush was tried first but
-turned out to be fragile across iOS install modes (legacy Add-to-Home-Screen
-vs. real manifest-driven PWA install produce different viewport/safe-area
-math, and a fixed margin sidesteps that entirely instead of chasing exact
-pixel anchoring). The
-active tab is shown by a single sliding highlight panel spanning the full
-left or right half of the pill (not just around the icon/label), including
-the strip behind the Add control's circle — animates between halves on
-navigation.
+A standard flush bottom tab bar (`BottomNav.svelte`) — full width, anchored
+to the true bottom edge with `bottom: 0`, translucent/blurred background
+(`backdrop-blur`) extending down through the home-indicator area, with
+`padding-bottom: env(safe-area-inset-bottom)` keeping the tappable
+icons/labels clear of it. This is the ordinary iOS/Android tab bar pattern —
+no floating margin, no rounded pill, no custom safe-area math. Two
+destinations, **Home** and **History** (routes `/` and `/history`), rendered
+globally from the root layout — along with the Add control and the toast —
+so logging works identically from either screen. The active tab is shown by
+a single sliding highlight panel spanning the full left or right half of the
+bar (not just around the icon/label), including the strip behind the Add
+control's circle — animates between halves on navigation.
 
 ### History / Charts view
 Renamed "Charts" in the UI. This is the *deliberate review* screen (e.g. for

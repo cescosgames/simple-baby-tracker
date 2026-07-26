@@ -5,11 +5,11 @@
 </script>
 
 <nav
-	class="fixed inset-x-4 z-30 flex h-16 items-stretch overflow-hidden rounded-full bg-baby-card/75 shadow-[0_4px_24px_rgba(63,61,86,0.18)] backdrop-blur-xl"
-	style="bottom: max(0.5rem, calc(env(safe-area-inset-bottom) - 0.75rem))"
+	class="fixed inset-x-0 bottom-0 z-30 flex h-16 items-stretch bg-baby-card/95 shadow-[0_-2px_12px_rgba(63,61,86,0.12)] backdrop-blur-xl"
+	style="padding-bottom: env(safe-area-inset-bottom)"
 >
 	<div
-		class="absolute inset-y-0 w-1/2 rounded-full bg-baby-lavender/60 transition-transform duration-300 ease-out"
+		class="absolute inset-y-0 w-1/2 bg-baby-lavender/60 transition-transform duration-300 ease-out"
 		style="transform: translateX({isHistory ? '100%' : '0'})"
 	></div>
 
